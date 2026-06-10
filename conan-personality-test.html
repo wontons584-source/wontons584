@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="theme-color" content="#0f172a">
+    <title>柯南性格测试</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif;background:#0f172a;min-height:100vh;display:flex;justify-content:center;align-items:center;padding:15px}
+        .card{background:#1e293b;padding:25px;border-radius:16px;box-shadow:0 10px 40px rgba(0,0,0,0.4);width:100%;max-width:480px;border:1px solid #38bdf8}
+        h2{color:#38bdf8;margin-bottom:18px;font-size:19px}
+        .progress{height:6px;background:#334155;border-radius:3px;margin-bottom:18px;overflow:hidden}
+        .progress-bar{height:100%;background:linear-gradient(90deg,#38bdf8,#0284c7);width:10%}
+        .btn{display:block;width:100%;padding:13px 12px;margin:8px 0;background:#0284c7;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:14px;text-align:left;transition:all .2s}
+        .btn:hover{background:#0369a1;transform:translateX(4px)}
+        .btn:active{transform:translateX(2px)}
+        .option-label{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;background:#0ea5e9;border-radius:50%;margin-right:10px;font-weight:700;font-size:12px}
+        .hidden{display:none!important}
+        .character-name{font-size:26px;color:#f43f5e;font-weight:700;margin:18px 0}
+        .char-icon{font-size:44px;margin-bottom:12px}
+        .quote{font-style:italic;color:#94a3b8;margin-bottom:18px;font-size:14px}
+        #char-desc{color:#cbd5e1;line-height:1.6;font-size:14px}
+    </style>
+</head>
+<body>
+
+<div class="card" id="s">
+    <div class="char-icon" style="font-size:56px;text-align:center">🔍</div>
+    <h2 style="text-align:center;font-size:22px;margin-bottom:8px">名侦探柯南</h2>
+    <p style="color:#94a3b8;text-align:center;margin-bottom:6px">性格平行宇宙测试</p>
+    <div style="border-top:1px solid #334155;margin:18px 0;padding-top:18px">
+        <p style="color:#cbd5e1;font-size:14px;line-height:1.5;margin-bottom:12px">想知道你在柯南世界里是哪一位角色？快来完成测试，找到你的平行宇宙身份！</p>
+        <div style="background:#0f172a;padding:12px;border-radius:6px;margin-bottom:16px">
+            <p style="color:#94a3b8;font-size:12px;margin-bottom:6px">测试说明：</p>
+            <ul style="color:#cbd5e1;font-size:12px;padding-left:18px;line-height:1.5">
+                <li>共10道题，每题4个选项</li>
+                <li>按真实想法选择</li>
+                <li>结果仅供娱乐</li>
+            </ul>
+        </div>
+        <button class="btn" style="background:linear-gradient(135deg,#38bdf8,#0284c7);text-align:center;font-size:15px;font-weight:700;padding:14px" id="sb">🚀 开始测试</button>
+    </div>
+</div>
+
+<div class="card hidden" id="q">
+    <div class="progress"><div class="progress-bar" id="pb"></div></div>
+    <h2 id="qt">加载中...</h2>
+    <button class="btn" id="a"><span class="option-label">A</span><span id="ta"></span></button>
+    <button class="btn" id="b"><span class="option-label">B</span><span id="tb"></span></button>
+    <button class="btn" id="c"><span class="option-label">C</span><span id="tc"></span></button>
+    <button class="btn" id="d"><span class="option-label">D</span><span id="td"></span></button>
+</div>
+
+<div class="card hidden" id="r">
+    <h2>测验结束！你是：</h2>
+    <div class="char-icon" id="ci">🔍</div>
+    <div class="character-name" id="cn">---</div>
+    <p class="quote" id="cq"></p>
+    <p id="cd">分析中...</p>
+    <button class="btn" style="background:#475569;text-align:center;margin-top:20px" id="rb">重新测试</button>
+</div>
+
+<script>
+var Q=[
+    {q:"少年侦探团邀你露营，你通常？",a:"立刻答应，提议玩寻宝游戏",b:"同意参加，带书在旁边看",c:"犹豫但不想扫兴",d:"婉拒，在家研究推理小说",t:["E","E","I","I"]},
+    {q:"看到奇怪暗号，你的直觉是？",a:"拍照存档，分析每个符号",b:"从不同角度观察找隐藏信息",c:"搜索记忆中类似图案",d:"联想到神秘组织或历史事件",t:["S","S","N","N"]},
+    {q:"灰原哀心情不好，你会？",a:"直接询问原因帮分析",b:"默默倒杯热可可",c:"陪她聊喜欢的选手",d:"准备零食安静陪伴",t:["T","T","F","F"]},
+    {q:"追踪黑衣组织线索，你倾向于？",a:"制定详细计划执行",b:"收集情报再行动",c:"随机应变保持方向",d:"跟着直觉灵活调整",t:["J","J","P","P"]},
+    {q:"收到匿名挑战信，你会？",a:"立刻调查发信人身份",b:"分析信中细节找线索",c:"觉得有趣期待挑战",d:"告诉朋友一起商量",t:["T","T","F","F"]},
+    {q:"博士发明新道具，你会？",a:"读说明书按步骤测试",b:"先看演示再尝试",c:"直接上手摸索功能",d:"想象能玩出什么花样",t:["S","S","N","N"]},
+    {q:"案件陷入僵局，你会？",a:"重新梳理证据找遗漏",b:"和大家讨论听看法",c:"暂时放下找灵感",d:"相信直觉换角度",t:["T","E","I","F"]},
+    {q:"朋友遇到危险，你会？",a:"冷静分析制定救援计划",b:"先报警再拖延时间",c:"奋不顾身保护对方",d:"用计谋分散注意力",t:["T","J","F","P"]},
+    {q:"你倾向哪种解决问题方式？",a:"依靠逻辑推理",b:"团队合作解决",c:"直觉经验判断",d:"创意策略制胜",t:["T","E","F","N"]},
+    {q:"在学校你更像？",a:"成绩优异的学霸",b:"活跃的社团骨干",c:"默默努力的观察者",d:"爱热闹的开心果",t:["S","E","I","E"]}
+];
+var S={E:0,I:0,S:0,N:0,T:0,F:0,J:0,P:0},step=0;
+
+function showQ(){
+    if(step<Q.length){
+        var q=Q[step];
+        document.getElementById("qt").innerHTML=q.q;
+        document.getElementById("ta").innerHTML=q.a;
+        document.getElementById("tb").innerHTML=q.b;
+        document.getElementById("tc").innerHTML=q.c;
+        document.getElementById("td").innerHTML=q.d;
+        document.getElementById("pb").style.width=((step+1)/Q.length*100)+"%";
+    }else showR();
+}
+
+function ch(o){
+    var idx=o=='a'?0:o=='b'?1:o=='c'?2:3;
+    Q[step].t[idx].split('/').forEach(function(k){S[k]++});
+    step++;showQ();
+}
+
+function showR(){
+    document.getElementById("q").classList.add("hidden");
+    document.getElementById("r").classList.remove("hidden");
+    var e=S.E-S.I,n=S.N-S.S,t=S.T-S.F,j=S.J-S.P,c=getC(e,n,t,j);
+    document.getElementById("ci").innerHTML=c.i;
+    document.getElementById("cn").innerHTML=c.n;
+    document.getElementById("cq").innerHTML=c.q;
+    document.getElementById("cd").innerHTML=c.d;
+}
+
+function getC(e,n,t,j){
+    if(t>=4){
+        if(j>=3)return{i:"🔍",n:"工藤新一/柯南",q:"\"真相只有一个！\"",d:"你拥有无与伦比的理性和逻辑思维，面对困难沉着冷静，关键时刻是最靠得住的智商担当！"};
+        if(j<=-2)return{i:"🧪",n:"灰原哀",q:"\"物品会反映创作者心境。\"",d:"你是带神秘感的独行侠，外表高冷内心细腻，默默观察一切，对熟悉的人温柔保护。"};
+        return{i:"⚔️",n:"服部平次",q:"\"生命有限所以宝贵！\"",d:"你是热情洋溢的关西名侦探，开朗直爽重情重义，推理能力出众，关键时刻挺身而出！"};
+    }
+    if(t<0&&j>=0){
+        if(e>=3)return{i:"🌸",n:"远山和叶",q:"\"因为我喜欢你啊！\"",d:"你是活泼开朗的元气少女，热情善良重情重义，对朋友爱人忠诚，内心坚强！"};
+        return{i:"💖",n:"毛利兰",q:"\"不到最后绝不放弃！\"",d:"你是团队小天使，极具同理心，重视约定感情，温柔外表下有坚韧的心！"};
+    }
+    if(t>=0&&j<0){
+        if(e>=2)return{i:"🎯",n:"赤井秀一",q:"\"Fear of death is worse...\"",d:"你是神秘莫测的银色子弹，冷静睿智行动力强，表面冷酷内心温柔，为正义可牺牲一切！"};
+        return{i:"🧪",n:"灰原哀",q:"\"物品会反映创作者心境。\"",d:"你是带神秘感的独行侠，外表高冷内心细腻，默默观察一切，对熟悉的人温柔保护。"};
+    }
+    if(t<0&&j<0){
+        if(e>=3)return{i:"💎",n:"铃木园子",q:"\"Ladies and gentlemen!\"",d:"你是活泼开朗的千金大小姐，热情奔放爱热闹，是朋友圈开心果，关键时刻可靠仗义！"};
+        if(n>=3)return{i:"🎩",n:"怪盗基德",q:"\"大海的蓝倒映天空...\"",d:"你是天生气氛大师和艺术家，追求刺激新鲜感，思维跳跃，总能华丽解决问题！"};
+        return{i:"🔧",n:"阿笠博士",q:"\"我是天才发明家！\"",d:"你是和蔼可亲的天才发明家，充满好奇心乐于助人，有时迷糊但心地善良！"};
+    }
+    return{i:"🔍",n:"工藤新一/柯南",q:"\"真相只有一个！\"",d:"你拥有出色的理性和逻辑思维！"};
+}
+
+function start(){document.getElementById("s").classList.add("hidden");document.getElementById("q").classList.remove("hidden");step=0;S={E:0,I:0,S:0,N:0,T:0,F:0,J:0,P:0};showQ();}
+function rst(){step=0;S={E:0,I:0,S:0,N:0,T:0,F:0,J:0,P:0};document.getElementById("r").classList.add("hidden");document.getElementById("s").classList.remove("hidden");}
+
+window.onload=function(){
+    document.getElementById("a").onclick=function(){ch('a')};
+    document.getElementById("b").onclick=function(){ch('b')};
+    document.getElementById("c").onclick=function(){ch('c')};
+    document.getElementById("d").onclick=function(){ch('d')};
+    document.getElementById("rb").onclick=rst;
+    document.getElementById("sb").onclick=start;
+};
+</script>
+
+</body>
+</html>
